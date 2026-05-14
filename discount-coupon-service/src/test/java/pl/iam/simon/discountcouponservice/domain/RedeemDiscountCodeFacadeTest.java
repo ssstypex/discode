@@ -9,10 +9,12 @@ import pl.iam.simon.discountcouponservice.application.redeem.RedeemDiscountCodeF
 import pl.iam.simon.discountcouponservice.application.redeem.RedeemDiscountCodePolicy;
 import pl.iam.simon.discountcouponservice.domain.model.Country;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCodeValue;
+import pl.iam.simon.discountcouponservice.domain.model.UserId;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeInput;
 import pl.iam.simon.discountcouponservice.domain.port.out.RedeemDiscountCodeDataSourceProvider;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +40,7 @@ class RedeemDiscountCodeFacadeTest {
 
         //when + then
         assertThrows(Exception.class, () -> redeemDiscountCodeUseCase.canBeUsed(
-                new RedeemDiscountCodeInput(new DiscountCodeValue("MAJ30"), Country.POLAND)));
+                new RedeemDiscountCodeInput(new DiscountCodeValue("MAJ30"), Country.POLAND, new UserId(UUID.randomUUID()))));
     }
 
 }

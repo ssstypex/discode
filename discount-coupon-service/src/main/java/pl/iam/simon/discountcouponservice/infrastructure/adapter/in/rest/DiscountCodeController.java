@@ -8,10 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.iam.simon.discountcouponservice.domain.model.Country;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCodeValue;
+import pl.iam.simon.discountcouponservice.domain.model.UserId;
 import pl.iam.simon.discountcouponservice.domain.port.in.CreateDiscountCodeInput;
 import pl.iam.simon.discountcouponservice.domain.port.in.CreateDiscountCodeUseCase;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeInput;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeUseCase;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +43,8 @@ public class DiscountCodeController {
         redeemDiscountCodeUseCase.canBeUsed(
                 new RedeemDiscountCodeInput(
                         new DiscountCodeValue(code),
-                        Country.fromCode(countryCode))
+                        Country.fromCode(countryCode),
+                        new UserId(UUID.randomUUID()))
         );
 
         return ResponseEntity.ok().build();
@@ -52,11 +56,9 @@ public class DiscountCodeController {
             @PathVariable("countryCode") String countryCode,
             @PathVariable("code") String code) {
         redeemDiscountCodeUseCase.redeemDiscountCode(
-                new RedeemDiscountCodeInput(
-                        new DiscountCodeValue(code),
-                        Country.fromCode(countryCode)
-                )
-        );
+                new RedeemDiscountCodeInput(new DiscountCodeValue(code),
+                        Country.fromCode(countryCode),
+                        new UserId(UUID.randomUUID())));
 
         return ResponseEntity.ok().build();
     }

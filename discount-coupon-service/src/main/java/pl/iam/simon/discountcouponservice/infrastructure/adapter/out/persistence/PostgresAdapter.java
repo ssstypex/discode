@@ -13,9 +13,9 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class PostgresAdapter implements CreateDiscountCodeDataSourceProvider, RedeemDiscountCodeDataSourceProvider {
+
     private final DiscountCodeRepository discountCodeRepository;
     private final DiscountCodeEntityMapper mapper;
-
 
     @Override
     public void createDiscountCode(DiscountCode discountCode) {

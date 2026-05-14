@@ -23,7 +23,7 @@ class DiscountCodeCreationFacadeTest {
     private DiscountCode testDiscountCode;
 
     @BeforeEach
-    void init() {redemption
+    void init() {
 //        testDiscountCode = new DiscountCode();
     }
 
