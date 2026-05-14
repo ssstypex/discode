@@ -32,6 +32,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       SPRING_FLYWAY_ENABLED: true
+      IPIFY_API_KEY: ${IPIFY_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy

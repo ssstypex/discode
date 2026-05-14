@@ -2,9 +2,13 @@ package pl.iam.simon.discountcouponservice.infrastructure.adapter.out.persistenc
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import pl.iam.simon.discountcouponservice.domain.model.Country;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
+import pl.iam.simon.discountcouponservice.domain.model.DiscountCodeValue;
 import pl.iam.simon.discountcouponservice.domain.port.out.CreateDiscountCodeDataSourceProvider;
 import pl.iam.simon.discountcouponservice.domain.port.out.RedeemDiscountCodeDataSourceProvider;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +23,17 @@ public class PostgresAdapter implements CreateDiscountCodeDataSourceProvider, Re
     }
 
     @Override
-    public void redeemDiscountCode() {
+    public void redeemDiscountCode(DiscountCode discountCode) {
+        DiscountCodeEntity discountCodeEntity = this.discountCodeRepository.findByCodeAndCountryCode(discountCode.getCode().value(), discountCode.getCountry().getCode()).orElseThrow();
+        this.mapper.updateEntity(discountCodeEntity, discountCode);
+        this.discountCodeRepository.save(discountCodeEntity);
 
+    }
+
+    @Override
+    public Optional<DiscountCode> findByCodeAndCountry(DiscountCodeValue discountCodeValue, Country country) {
+        return discountCodeRepository
+                .findByCodeAndCountryCode(discountCodeValue.value(), country.getCode())
+                .map(mapper::toDomain);
     }
 }
