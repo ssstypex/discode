@@ -1,19 +1,15 @@
 package pl.iam.simon.discountcouponservice.domain;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeUseCase;
 import pl.iam.simon.discountcouponservice.domain.port.out.CreateDiscountCodeDataSourceProvider;
 
 @Service
+@RequiredArgsConstructor
 public class RedeemDiscountCodeFacade implements RedeemDiscountCodeUseCase {
 
-    private CreateDiscountCodeDataSourceProvider dataSourceProvider;
-
-    @Autowired
-    public RedeemDiscountCodeFacade(CreateDiscountCodeDataSourceProvider dataSourceProvider) {
-        this.dataSourceProvider = dataSourceProvider;
-    }
+    private final CreateDiscountCodeDataSourceProvider dataSourceProvider;
 
     @Override
     public void redeemDiscountCode() {
