@@ -1,0 +1,11 @@
+
+Heja hej! W poleceniu wskazane było, żeby uzasadnić swoje wybory, więc uzasadniam :)
+
+Mimo że zadanie nie wydaje się z pozoru skomplikowane to zakładam, że celem nie było przygotowanie dwóch endpointów, tylko stworzenie rozwiązania, które może stanowić bazę dla całego modułu zarządzania kodami rabatowymi, stąd wybór architektury heksagonalnej z centralnym elementem domeny, czyli kodem rabatowym. 
+
+Wydaje mi się że jest to domena, która w realnym produkcie rzadko pozostaje prosta na długo i już w pierwszych sprintach mogą pojawić się wymagania, które mocno ją rozszerzą i skomplikują. Każda z tych nowych funkcjonalności może potrzebować innej technologii, lub te potrzeby technologiczne będą po prostu ewoluować w miarę rozwoju projektu i być może w przyszłości konieczna będzie podmiana bazy danych (np. przy migracji do chmury lub potrzebę cache-owania), być może zmieni się sposób autoryzacji użytkownik i być może nadejdzie konieczność dodania komunikacji asynchronicznej. Dzięki temu że cała logika jest chroniona przed infrastrukturą, a komunikacja odbywa się jedynie z wykorzystaniem specjalnie stworzonych portów, adaptery mogą być swobodnie podmieniane, bez ingerencji w rdzeń. Pozwala to też niezależnie rozwijać poszczególne elementy aplikacji, bo bazujemy na kontrakcie definiowanym przez interfejs. 
+
+Walidacja została stworzona jako kompozyt aby umożliwić łatwe tworzenie walidatorów do konkretnych użyć, czy nawet budować je dynamicznie. Zdecydowałem się umieścić budowanie takiego walidatora w warstwie domeny i nie wstrzykiwać odpowiednich polityk dopiero podczas tworzenia beana ponieważ jest to raczej rzecz ściśle powiązana z użyciem. Użycie kompozytu pozwala też zagnieżdżać w sobie polityki zbiorcze, ponieważ implementują ten sam interfejs, co pozwala zagregować kilka powiązanych ze sobą walidatorów a następnie połączyć w jeden głowny (np. x walidatoró dla użytkowników premium można zagregować w jeden a następnie wpiąć go jako jeden element do głównego kompozytu). No itak jak wspomniałem mimo, że aktualnie lista definiowana jest stetycznie, to jest możliwość budować je dynamicznie na podstawie "czegoś". No i po raz kolejny taki podział pozwala na niezależne zmiany, niezależne testowanie a fasada wie jedynie tyle, że walidacja istnieje, nie ma dostępu do szczegółów.
+
+
+
