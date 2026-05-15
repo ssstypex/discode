@@ -1,5 +1,6 @@
 package pl.iam.simon.discountcouponservice.infrastructure.adapter.in.rest;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,6 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,10 +40,11 @@ class DiscountCodeControllerEndpointTest {
 
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
+        Dotenv dotenv = Dotenv.configure().directory("../").ignoreIfMissing().load();
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
-        registry.add("ipify.api-key", () -> System.getenv("IPIFY_API_KEY"));
+        registry.add("ipify.api-key", () -> dotenv.get("IPIFY_API_KEY"));
     }
 
     @LocalServerPort
