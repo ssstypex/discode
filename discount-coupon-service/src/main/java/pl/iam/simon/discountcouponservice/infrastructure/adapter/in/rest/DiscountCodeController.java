@@ -26,12 +26,10 @@ public class DiscountCodeController {
 
     @PostMapping
     public ResponseEntity<?> createDiscountCode(@Valid @RequestBody CreateDiscountCodeDTO discountCode) {
-        createDiscountCodeUseCase.createDiscountCode(
-                new CreateDiscountCodeInput(
-                        new DiscountCodeValue(discountCode.code()),
-                        Country.fromCode(discountCode.countryCode()),
-                        discountCode.maxUsages())
-        );
+        createDiscountCodeUseCase.createDiscountCode(new CreateDiscountCodeInput(
+                new DiscountCodeValue(discountCode.code()), Country.fromCode(discountCode.countryCode()),
+                discountCode.maxUsages()));
+
         return new ResponseEntity<>(
                 HttpStatus.CREATED);
     }
@@ -43,9 +41,7 @@ public class DiscountCodeController {
 
         DiscountCodePolicyValidationResult discountCodePolicyValidationResult =
                 redeemDiscountCodeUseCase.canBeUsed(new RedeemDiscountCodeInput(
-                        new DiscountCodeValue(code),
-                        Country.fromCode(countryCode),
-                        new UserId(UUID.randomUUID()))
+                        new DiscountCodeValue(code), Country.fromCode(countryCode), new UserId(UUID.randomUUID()))
         );
         DiscountCodeExceptionHandler.ErrorResponse response = new DiscountCodeExceptionHandler.ErrorResponse(
                 discountCodePolicyValidationResult.getErrorList().stream().map(error -> error.error().getMessage()).toList());
@@ -58,8 +54,7 @@ public class DiscountCodeController {
             @PathVariable("countryCode") String countryCode,
             @PathVariable("code") String code) {
         redeemDiscountCodeUseCase.redeemDiscountCode(
-                new RedeemDiscountCodeInput(new DiscountCodeValue(code),
-                        Country.fromCode(countryCode),
+                new RedeemDiscountCodeInput(new DiscountCodeValue(code), Country.fromCode(countryCode),
                         new UserId(UUID.randomUUID())));
 
         return ResponseEntity.ok().build();

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class PostgresAdapter implements CreateDiscountCodeDataSourceProvider, RedeemDiscountCodeDataSourceProvider {
+public class DiscountCodePostgresAdapter implements CreateDiscountCodeDataSourceProvider, RedeemDiscountCodeDataSourceProvider {
 
     private final DiscountCodeRepository discountCodeRepository;
     private final DiscountCodeEntityMapper mapper;
@@ -27,13 +27,17 @@ public class PostgresAdapter implements CreateDiscountCodeDataSourceProvider, Re
         DiscountCodeEntity discountCodeEntity = this.discountCodeRepository.findByCodeAndCountryCode(discountCode.getCode().value(), discountCode.getCountry().getCode()).orElseThrow();
         this.mapper.updateEntity(discountCodeEntity, discountCode);
         this.discountCodeRepository.save(discountCodeEntity);
-
     }
 
     @Override
     public Optional<DiscountCode> findByCodeAndCountry(DiscountCodeValue discountCodeValue, Country country) {
-        return discountCodeRepository
+        return this.discountCodeRepository
                 .findByCodeAndCountryCode(discountCodeValue.value(), country.getCode())
-                .map(mapper::toDomain);
+                .map(this.mapper::toDomain);
+    }
+
+    @Override
+    public boolean codeExist(DiscountCodeValue discountCodeValue, Country country) {
+        return this.discountCodeRepository.existsByCodeAndCountryCode(discountCodeValue.value(), country.getCode());
     }
 }

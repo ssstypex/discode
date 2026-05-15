@@ -6,19 +6,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.iam.simon.discountcouponservice.application.create.DiscountCodeCreationFacade;
+import pl.iam.simon.discountcouponservice.domain.service.CreateDiscountCodeFacade;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
 import pl.iam.simon.discountcouponservice.domain.port.out.CreateDiscountCodeDataSourceProvider;
 
 
 @ExtendWith(MockitoExtension.class)
-class DiscountCodeCreationFacadeTest {
+class CreateDiscountCodeFacadeTest {
 
     @Mock
     private CreateDiscountCodeDataSourceProvider createDiscountCodeDataSourceProvider;
 
     @InjectMocks
-    private DiscountCodeCreationFacade discountCodeCreationFacade;
+    private CreateDiscountCodeFacade createDiscountCodeFacade;
 
     private DiscountCode testDiscountCode;
 

@@ -1,4 +1,4 @@
-package pl.iam.simon.discountcouponservice.infrastructure.adapter.in;
+package pl.iam.simon.discountcouponservice.infrastructure.adapter.in.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,6 @@ import pl.iam.simon.discountcouponservice.domain.port.in.CreateDiscountCodeUseCa
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeUseCase;
 import pl.iam.simon.discountcouponservice.domain.validator.DiscountCodePolicyError;
 import pl.iam.simon.discountcouponservice.domain.validator.DiscountCodePolicyValidationResult;
-import pl.iam.simon.discountcouponservice.infrastructure.adapter.in.rest.CreateDiscountCodeDTO;
-import pl.iam.simon.discountcouponservice.infrastructure.adapter.in.rest.DiscountCodeController;
 
 import java.util.List;
 

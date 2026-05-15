@@ -1,4 +1,4 @@
-package pl.iam.simon.discountcouponservice.application.redeem;
+package pl.iam.simon.discountcouponservice.domain.service;
 
 import pl.iam.simon.discountcouponservice.domain.exception.DiscountCodeValidationException;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;

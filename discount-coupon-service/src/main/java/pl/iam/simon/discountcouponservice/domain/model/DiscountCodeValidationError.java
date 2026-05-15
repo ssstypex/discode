@@ -10,7 +10,8 @@ public enum DiscountCodeValidationError {
     WRONG_COUNTRY("Discount code is not available in your country"),
     USER_USAGE_LIMIT("Discount code can only be used once per user"),
     USAGE_LIMIT("Discount code is no longer available"),
-    UNKNOWN("Discount code does not exist");
+    UNKNOWN("Discount code does not exist"),
+    CODE_EXIST("Discount code already exists"),;
 
     private final String message;
 }
