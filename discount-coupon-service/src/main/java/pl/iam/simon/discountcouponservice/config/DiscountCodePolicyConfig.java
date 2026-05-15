@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import pl.iam.simon.discountcouponservice.application.redeem.RedeemDiscountCodePolicy;
 import pl.iam.simon.discountcouponservice.domain.port.out.GetCurrentUserProvider;
 import pl.iam.simon.discountcouponservice.domain.port.out.GetUserCountryProvider;
-import pl.iam.simon.discountcouponservice.domain.validator.GetDiscountCodeUsageProvider;
+import pl.iam.simon.discountcouponservice.domain.port.out.GetDiscountCodeUsageProvider;
 
 @Configuration
 public class DiscountCodePolicyConfig {

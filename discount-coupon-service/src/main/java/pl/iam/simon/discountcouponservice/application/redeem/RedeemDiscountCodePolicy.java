@@ -3,12 +3,13 @@ package pl.iam.simon.discountcouponservice.application.redeem;
 import pl.iam.simon.discountcouponservice.domain.exception.DiscountCodeValidationException;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
 import pl.iam.simon.discountcouponservice.domain.port.out.GetCurrentUserProvider;
+import pl.iam.simon.discountcouponservice.domain.port.out.GetDiscountCodeUsageProvider;
 import pl.iam.simon.discountcouponservice.domain.port.out.GetUserCountryProvider;
 import pl.iam.simon.discountcouponservice.domain.validator.*;
 
 import java.util.List;
 
-public class RedeemDiscountCodePolicy {
+public class RedeemDiscountCodePolicy implements DiscountCodePolicy {
 
     private final List<DiscountCodePolicy> validators;
 
@@ -23,5 +24,12 @@ public class RedeemDiscountCodePolicy {
 
     public void validate(DiscountCode discountCode) throws DiscountCodeValidationException {
         validators.forEach(validator -> validator.validate(discountCode));
+    }
+
+    @Override
+    public DiscountCodePolicyValidationResult validateWithResult(DiscountCode discountCode) {
+        return this.validators.stream()
+                .map(validator -> validator.validateWithResult(discountCode))
+                .reduce(DiscountCodePolicyValidationResult.valid(), DiscountCodePolicyValidationResult::merge);
     }
 }

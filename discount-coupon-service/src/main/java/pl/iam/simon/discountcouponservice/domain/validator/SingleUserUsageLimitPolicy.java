@@ -6,6 +6,7 @@ import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCodeValidationError;
 import pl.iam.simon.discountcouponservice.domain.model.UserId;
 import pl.iam.simon.discountcouponservice.domain.port.out.GetCurrentUserProvider;
+import pl.iam.simon.discountcouponservice.domain.port.out.GetDiscountCodeUsageProvider;
 
 @RequiredArgsConstructor
 public class SingleUserUsageLimitPolicy implements DiscountCodePolicy {
@@ -15,10 +16,17 @@ public class SingleUserUsageLimitPolicy implements DiscountCodePolicy {
 
     @Override
     public void validate(DiscountCode discountCode) throws DiscountCodeValidationException {
-        UserId userId = currentUserProvider.getCurrentUserId();
-        if(usageProvider.hasUserUsedCode(userId, discountCode)) {
+        if(!validateWithResult(discountCode).isValid()) {
           throw new DiscountCodeValidationException(DiscountCodeValidationError.USER_USAGE_LIMIT);
         }
     }
 
+    @Override
+    public DiscountCodePolicyValidationResult validateWithResult(DiscountCode discountCode) {
+        UserId userId = currentUserProvider.getCurrentUserId();
+        return usageProvider.hasUserUsedCode(userId, discountCode)
+                ? DiscountCodePolicyValidationResult.invalid(
+                        new DiscountCodePolicyError(DiscountCodeValidationError.USER_USAGE_LIMIT))
+                : DiscountCodePolicyValidationResult.valid();
+    }
 }

@@ -13,8 +13,16 @@ public class UserCountryPolicy implements DiscountCodePolicy {
 
     @Override
     public void validate(DiscountCode discountCode) throws DiscountCodeValidationException {
-        if(!userCountryProvider.getUserCountry().equals(discountCode.getCountry())) {
+        if(!validateWithResult(discountCode).isValid()) {
             throw new DiscountCodeValidationException(DiscountCodeValidationError.WRONG_COUNTRY);
         }
+    }
+
+    @Override
+    public DiscountCodePolicyValidationResult validateWithResult(DiscountCode discountCode) {
+        return userCountryProvider.getUserCountry().equals(discountCode.getCountry())
+                ? DiscountCodePolicyValidationResult.valid()
+                : DiscountCodePolicyValidationResult.invalid(
+                        new DiscountCodePolicyError(DiscountCodeValidationError.WRONG_COUNTRY));
     }
 }

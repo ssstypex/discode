@@ -9,6 +9,7 @@ import pl.iam.simon.discountcouponservice.domain.port.out.SaveDiscountCodeUsageP
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeInput;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeUseCase;
 import pl.iam.simon.discountcouponservice.domain.port.out.RedeemDiscountCodeDataSourceProvider;
+import pl.iam.simon.discountcouponservice.domain.validator.DiscountCodePolicyValidationResult;
 
 @RequiredArgsConstructor
 public class RedeemDiscountCodeFacade implements RedeemDiscountCodeUseCase {
@@ -21,15 +22,16 @@ public class RedeemDiscountCodeFacade implements RedeemDiscountCodeUseCase {
     @Override
     public void redeemDiscountCode(RedeemDiscountCodeInput discountCodeInput) {
         final DiscountCode discountCode = this.getDiscountCode(discountCodeInput);
+        policy.validate(discountCode);
         discountCode.incrementUsages();
         dataSourceProvider.redeemDiscountCode(discountCode);
         saveDiscountCodeUsageProvider.save(discountCode, discountCodeInput.userId());
     }
 
     @Override
-    public void canBeUsed(RedeemDiscountCodeInput discountCodeInput) {
+    public DiscountCodePolicyValidationResult canBeUsed(RedeemDiscountCodeInput discountCodeInput) {
         DiscountCode discountCode = this.getDiscountCode(discountCodeInput);
-        policy.validate(discountCode);
+        return policy.validateWithResult(discountCode);
     }
 
     private DiscountCode getDiscountCode(RedeemDiscountCodeInput discountCodeInput) {

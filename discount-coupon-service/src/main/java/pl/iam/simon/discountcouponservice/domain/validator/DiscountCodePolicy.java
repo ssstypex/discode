@@ -5,4 +5,5 @@ import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
 
 public interface DiscountCodePolicy {
     void validate(DiscountCode discountCode) throws DiscountCodeValidationException;
+    DiscountCodePolicyValidationResult validateWithResult(DiscountCode discountCode);
 }

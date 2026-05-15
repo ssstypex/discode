@@ -2,7 +2,6 @@ package pl.iam.simon.discountcouponservice.infrastructure.adapter.in.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,7 @@ import pl.iam.simon.discountcouponservice.domain.port.in.CreateDiscountCodeInput
 import pl.iam.simon.discountcouponservice.domain.port.in.CreateDiscountCodeUseCase;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeInput;
 import pl.iam.simon.discountcouponservice.domain.port.in.RedeemDiscountCodeUseCase;
+import pl.iam.simon.discountcouponservice.domain.validator.DiscountCodePolicyValidationResult;
 
 import java.util.UUID;
 
@@ -37,17 +37,19 @@ public class DiscountCodeController {
     }
 
     @GetMapping("/{countryCode}/{code}/validate")
-    public ResponseEntity<Void> validateDiscountCode(
+    public ResponseEntity<DiscountCodeExceptionHandler.ErrorResponse> validateDiscountCode(
             @PathVariable("countryCode") String countryCode,
             @PathVariable("code") String code) {
-        redeemDiscountCodeUseCase.canBeUsed(
-                new RedeemDiscountCodeInput(
+
+        DiscountCodePolicyValidationResult discountCodePolicyValidationResult =
+                redeemDiscountCodeUseCase.canBeUsed(new RedeemDiscountCodeInput(
                         new DiscountCodeValue(code),
                         Country.fromCode(countryCode),
                         new UserId(UUID.randomUUID()))
         );
-
-        return ResponseEntity.ok().build();
+        DiscountCodeExceptionHandler.ErrorResponse response = new DiscountCodeExceptionHandler.ErrorResponse(
+                discountCodePolicyValidationResult.getErrorList().stream().map(error -> error.error().getMessage()).toList());
+        return ResponseEntity.ok(response);
     }
 
 

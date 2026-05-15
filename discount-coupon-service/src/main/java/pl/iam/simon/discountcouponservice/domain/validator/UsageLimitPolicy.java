@@ -8,8 +8,15 @@ public class UsageLimitPolicy implements DiscountCodePolicy {
 
     @Override
     public void validate(DiscountCode discountCode) throws DiscountCodeValidationException {
-        if(!discountCode.isAvailable()) {
+        if(!validateWithResult(discountCode).isValid()) {
             throw new DiscountCodeValidationException(DiscountCodeValidationError.USAGE_LIMIT);
         }
+    }
+
+    @Override
+    public DiscountCodePolicyValidationResult validateWithResult(DiscountCode discountCode) {
+        return discountCode.isAvailable()
+                ? DiscountCodePolicyValidationResult.valid()
+                : DiscountCodePolicyValidationResult.invalid(new DiscountCodePolicyError(DiscountCodeValidationError.USAGE_LIMIT));
     }
 }

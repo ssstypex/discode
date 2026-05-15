@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import pl.iam.simon.discountcouponservice.domain.model.DiscountCode;
 import pl.iam.simon.discountcouponservice.domain.model.UserId;
 import pl.iam.simon.discountcouponservice.domain.port.out.SaveDiscountCodeUsageProvider;
-import pl.iam.simon.discountcouponservice.domain.validator.GetDiscountCodeUsageProvider;
+import pl.iam.simon.discountcouponservice.domain.port.out.GetDiscountCodeUsageProvider;
 
 @Component
 @RequiredArgsConstructor
